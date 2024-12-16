@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Demographic Profile - CalCal</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        /* General Reset */
+        body, h1, h2, h3, p, ul, li, a, button, input, select, form {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        /* Body and Font Styling */
+        body {
+            font-family: 'Arial', sans-serif;
+            background: linear-gradient(135deg, #f06, #ff8000);
+            color: #fff;
+            overflow-x: hidden;
+            padding: 0;
+            margin: 0;
+        }
+
+        /* Header Section */
+        header {
+            background: linear-gradient(135deg, #ff0080, #ff8000);
+            padding: 15px 40px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            color: white;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+        }
+
+        header .logo {
+            font-size: 3rem;
+            font-weight: bold;
+            text-transform: uppercase;
+            color: #00FFFF;
+            background: linear-gradient(45deg, #00FFFF, #FF00FF);
+            -webkit-background-clip: text;
+            background-clip: text;
+            text-shadow: 0 0 2px #FF00FF;
+        }
+
+        .navbar {
+            display: flex;
+            align-items: center;
+        }
+
+        .nav-links {
+            list-style: none;
+            display: flex;
+        }
+
+        .nav-links li {
+            margin-left: 20px;
+        }
+
+        .nav-links a {
+            color: #fff;
+            text-decoration: none;
+            padding: 10px 15px;
+            display: block;
+            transition: all 0.3s ease;
+        }
+
+        .nav-links a:hover {
+            color: #ff80c2;
+            text-shadow: 0 0 2px #ff80c2, 0 0 3px #ff80c2;
+        }
+
+        /* Demographic Profile Section */
+        #demographic-profile {
+            padding: 60px 20px;
+            background: rgba(0, 0, 0, 0.8);
+            box-shadow: inset 0 0 3px rgba(255, 0, 255, 0.03);
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            text-align: center;
+        }
+
+        .section-title {
+            font-size: 2.5rem;
+            margin-bottom: 40px;
+            color: #ff00ff;
+            text-shadow: 0 0 3px #ff00ff, 0 0 5px #ff00ff;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+            text-align: left;
+        }
+
+        .form-group label {
+            font-size: 1.2rem;
+            color: #fff;
+            margin-bottom: 5px;
+            display: block;
+        }
+
+        .form-input {
+            width: 100%;
+            padding: 12px;
+            font-size: 1rem;
+            border: 2px solid #ff00ff;
+            border-radius: 5px;
+            background: rgba(255, 255, 255, 0.1);
+            color: black;
+            margin-top: 5px;
+            margin-bottom: 20px;
+        }
+
+        .form-input:focus {
+            outline: none;
+            border-color: #ff80c2;
+        }
+
+        .submit-btn {
+            background-color: #ff0080;
+            color: black;
+            padding: 12px 25px;
+            border: none;
+            border-radius: 30px;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .submit-btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 0 2px #ff0080, 0 0 5px #ff0080;
+        }
+
+        /* BMI Result */
+        .bmi-result {
+            margin-top: 20px;
+            font-size: 1.5rem;
+            color: #00FFFF;
+            font-weight: bold;
+        }
+
+        /* Footer Section */
+        footer {
+            text-align: center;
+            padding: 20px;
+            background: #ff0080;
+            color: black;
+            text-shadow: 0 0 1px #ff00ff;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            header {
+                padding: 10px;
+            }
+
+            .container {
+                padding: 20px;
+            }
+
+            .form-group {
+                text-align: center;
+            }
+
+            .nav-links {
+                flex-direction: column;
+            }
+
+            .nav-links li {
+                margin-left: 0;
+                margin-bottom: 10px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+<!-- Header Section -->
+<header>
+    <div class="container">
+        <div class="logo">CalCal</div>
+        <nav class="navbar">
+            <div class="menu-icon" id="menu-toggle">
+                <i class="fas fa-bars"></i>
+            </div>
+            <ul class="nav-links" id="nav-links">
+                <li><a href="index.html">Home</a></li>
+            </ul>
+        </nav>
+    </div>
+</header>
+
+<!-- Demographic Profile Section -->
+<section id="demographic-profile">
+    <div class="container">
+        <h1 class="section-title">Enter Your Demographic Profile</h1>
+        <form id="bmi-form">
+            <div class="form-group">
+                <label for="age">Age:</label>
+                <input type="number" id="age" name="age" class="form-input" required>
+            </div>
+
+            <div class="form-group">
+                <label for="gender">Gender:</label>
+                <select id="gender" name="gender" class="form-input">
+                    <option value="male">Male</option>
+                    <option value="female">Female</option>
+                    <option value="other">Other</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="height">Height (cm):</label>
+                <input type="number" id="height" name="height" class="form-input" required>
+            </div>
+
+            <div class="form-group">
+                <label for="weight">Weight (kg):</label>
+                <input type="number" id="weight" name="weight" class="form-input" required>
+            </div>
+
+            <div class="form-group">
+                <label for="activity-level">Activity Level:</label>
+                <select id="activity-level" name="activity-level" class="form-input">
+                    <option value="sedentary">Not at all </option>
+                    <option value="light">Lightly Active</option>
+                    <option value="moderate">Moderately Active</option>
+                    <option value="active">Very Active</option>
+                </select>
+            </div>
+
+            <button type="submit" class="submit-btn">Submit</button>
+        </form>
+
+        <!-- BMI Result Display -->
+        <div class="bmi-result" id="bmi-result"></div>
+    </div>
+</section>
+
+<!-- Footer Section -->
+<footer>
+    <p>&copy; 2024 CalCal. All rights reserved.</p>
+</footer>
+
+<script>
+    // Function to calculate BMI
+    document.getElementById('bmi-form').addEventListener('submit', function (event) {
+        event.preventDefault();  // Prevent form submission
+
+        const height = document.getElementById('height').value;
+        const weight = document.getElementById('weight').value;
+
+        // Check if inputs are valid
+        if (height && weight) {
+            const heightInMeters = height / 100;  // Convert cm to meters
+            const bmi = weight / (heightInMeters * heightInMeters);  // BMI formula
+
+            // Display the BMI result
+            document.getElementById('bmi-result').textContent = `Your BMI: ${bmi.toFixed(2)}`;
+        } else {
+            document.getElementById('bmi-result').textContent = "Please enter valid height and weight.";
+        }
+    });
+</script>
+
+</body>
+</html>

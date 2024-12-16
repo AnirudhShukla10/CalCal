@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>About BMI</title>
+
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+
+    <!-- Chart.js CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <!-- Inline CSS -->
+    <style>
+        body {
+            font-family: 'Roboto', sans-serif;
+            background-color: #f5f5f5;
+            margin: 0;
+            padding: 0;
+            color: #333;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 20px auto;
+            padding: 20px;
+        }
+
+        h1 {
+            text-align: center;
+            color: #4CAF50;
+            font-size: 36px;
+        }
+
+        p {
+            text-align: center;
+            color: #666;
+        }
+
+        /* Section Styling */
+        .section {
+            margin-bottom: 30px;
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .section h3 {
+            margin-bottom: 15px;
+            color: #4CAF50;
+        }
+
+        .section ul {
+            padding-left: 20px;
+        }
+
+        .section li {
+            margin: 5px 0;
+        }
+
+        /* Table Styling */
+        .table-container {
+            margin-top: 20px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        table th,
+        table td {
+            padding: 10px;
+            border: 1px solid #ddd;
+            text-align: center;
+        }
+
+        table th {
+            background-color: #4CAF50;
+            color: white;
+        }
+
+        table tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+
+        /* Chart Container */
+        .chart-container {
+            margin-top: 30px;
+        }
+
+        /* Footer */
+        .footer {
+            text-align: center;
+            margin-top: 30px;
+            font-size: 14px;
+            color: #777;
+        }
+
+        .footer a {
+            color: #4CAF50;
+            text-decoration: none;
+        }
+    </style>
+</head>
+
+<body>
+<div class="container">
+    <h1>About BMI (Body Mass Index)</h1>
+    <p>Learn more about BMI and how it can be used to assess your health status.</p>
+
+    <!-- What is BMI Section -->
+    <div class="section">
+        <h3>What is BMI?</h3>
+        <p>BMI is a number calculated from a person's height and weight. It applies to adult men and women. BMI is used as a screening tool to identify possible weight problems for adults.</p>
+    </div>
+
+    <!-- How is BMI Calculated Section -->
+    <div class="section">
+        <h3>How is BMI Calculated?</h3>
+        <p>BMI is calculated using the following formula:</p>
+        <pre> BMI = weight (kg) / height (m)^2 </pre>
+        <p>For example, a person who weighs 70kg and is 1.75m tall has a BMI of:</p>
+        <pre> BMI = 70 / (1.75)^2 = 22.86 </pre>
+    </div>
+
+    <!-- BMI Categories Section -->
+    <div class="section">
+        <h3>BMI Categories</h3>
+        <table>
+            <thead>
+            <tr>
+                <th>BMI Range</th>
+                <th>Category</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr>
+                <td>Below 18.5</td>
+                <td>Underweight</td>
+            </tr>
+            <tr>
+                <td>18.5 - 24.9</td>
+                <td>Normal weight</td>
+            </tr>
+            <tr>
+                <td>25.0 - 29.9</td>
+                <td>Overweight</td>
+            </tr>
+            <tr>
+                <td>30.0 and above</td>
+                <td>Obese</td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <!-- Fun Facts Section -->
+    <div class="section">
+        <h3>Fun Facts About BMI and Health</h3>
+        <ul>
+            <li><strong>1. BMI is not a diagnostic tool:</strong> It does not directly measure body fat, and it doesn't distinguish between lean body mass and fat.</li>
+            <li><strong>2. BMI can vary by age and gender:</strong> Younger adults generally have lower BMI compared to older adults. Also, BMI may not account for muscle mass in athletes.</li>
+            <li><strong>3. BMI helps identify health risks:</strong> High BMI can increase the risk of diseases like heart disease, type 2 diabetes, and certain cancers.</li>
+            <li><strong>4. BMI is an easy, quick way to assess health:</strong> It's a useful first step in determining whether you're underweight, overweight, or at a healthy weight.</li>
+        </ul>
+    </div>
+
+    <!-- BMI Chart -->
+    <div class="chart-container">
+        <canvas id="bmiChart"></canvas>
+    </div>
+
+    <!-- Footer -->
+    <div class="footer">
+        <p>&copy; 2024 CalCal. All rights reserved. <a href="index.html">Back to Home</a></p>
+    </div>
+</div>
+
+<!-- JavaScript -->
+<script>
+    // Chart.js for BMI Chart
+    const ctx = document.getElementById('bmiChart').getContext('2d');
+    const bmiChart = new Chart(ctx, {
+        type: 'bar',
+        data: {
+            labels: ['Underweight', 'Normal weight', 'Overweight', 'Obese'],
+            datasets: [{
+                label: 'BMI Categories',
+                data: [10, 60, 20, 10], // Example data, modify as per real statistics
+                backgroundColor: ['#FFEB3B', '#8BC34A', '#FF9800', '#F44336'],
+                borderWidth: 1
+            }]
+        },
+        options: {
+            responsive: true,
+            scales: {
+                y: {
+                    beginAtZero: true
+                }
+            }
+        }
+    });
+</script>
+</body>
+
+</html>

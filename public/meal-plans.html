@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Meal Plans Based on BMI</title>
+
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+
+    <!-- Chart.js CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <!-- Inline CSS -->
+    <style>
+        body {
+            font-family: 'Roboto', sans-serif;
+            background-color: #f5f5f5;
+            margin: 0;
+            padding: 0;
+            color: #333;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        h1 {
+            text-align: center;
+            color: #5b8c5a;
+            font-size: 36px;
+        }
+
+        .form-container {
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            margin-bottom: 30px;
+        }
+
+        .form-container h3 {
+            font-size: 24px;
+            color: #5b8c5a;
+            margin-bottom: 10px;
+        }
+
+        .form-container input,
+        .form-container button {
+            width: 100%;
+            padding: 10px;
+            margin: 10px 0;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            font-size: 16px;
+        }
+
+        .chart-container {
+            position: relative;
+            height: 300px;
+            margin-top: 20px;
+        }
+
+        .footer {
+            text-align: center;
+            margin-top: 30px;
+            font-size: 14px;
+            color: #777;
+        }
+
+        .footer a {
+            color: #5b8c5a;
+            text-decoration: none;
+        }
+
+        .meal-plans-output {
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            margin-top: 20px;
+        }
+
+        .meal-plans-output h3 {
+            color: #5b8c5a;
+            font-size: 24px;
+            margin-bottom: 10px;
+        }
+
+        .meal-plans-output p {
+            font-size: 16px;
+            line-height: 1.6;
+        }
+
+        .meal-plans-output ul {
+            padding-left: 20px;
+        }
+
+        .meal-plans-output ul li {
+            margin-bottom: 10px;
+        }
+    </style>
+</head>
+
+<body>
+<div class="container">
+    <h1>Meal Plans Based on Your BMI</h1>
+
+    <!-- Form for BMI Input -->
+    <div class="form-container">
+        <h3>Enter Your BMI</h3>
+        <form id="bmi-form">
+            <input type="number" id="bmi" placeholder="Enter your BMI value" required>
+            <button type="submit">Generate Meal Plan</button>
+        </form>
+    </div>
+
+    <!-- Meal Plan Output Section -->
+    <div id="meal-plans-output" class="meal-plans-output" style="display:none;">
+        <h3>Your Personalized Meal Plan</h3>
+        <p id="meal-plan-text"></p>
+    </div>
+
+    <!-- Chart Section -->
+    <div class="chart-container">
+        <canvas id="mealChart"></canvas>
+    </div>
+
+    <!-- Footer -->
+    <div class="footer">
+        <p>&copy; 2024 CalCal. All rights reserved. <a href="#home">Back to Home</a></p>
+    </div>
+</div>
+
+<script>
+    // Define Meal Plan Suggestions Based on BMI Ranges
+    const mealPlans = [
+        { range: [0, 18.5], plan: `
+                <ul>
+                    <li><strong>Breakfast:</strong> Scrambled eggs with avocado toast and orange juice.</li>
+                    <li><strong>Lunch:</strong> Grilled chicken with quinoa and roasted vegetables.</li>
+                    <li><strong>Dinner:</strong> Baked salmon with sweet potatoes and steamed broccoli.</li>
+                    <li><strong>Snacks:</strong> Mixed nuts, Greek yogurt, or a banana with peanut butter.</li>
+                </ul>
+            ` },
+        { range: [18.5, 24.9], plan: `
+                <ul>
+                    <li><strong>Breakfast:</strong> Oatmeal topped with fresh berries and almond butter.</li>
+                    <li><strong>Lunch:</strong> Turkey wrap with lettuce, tomato, and hummus.</li>
+                    <li><strong>Dinner:</strong> Grilled chicken salad with mixed greens, cucumbers, and vinaigrette.</li>
+                    <li><strong>Snacks:</strong> Apple slices, carrots with hummus, or rice cakes.</li>
+                </ul>
+            ` },
+        { range: [25, 29.9], plan: `
+                <ul>
+                    <li><strong>Breakfast:</strong> Smoothie with spinach, banana, protein powder, and almond milk.</li>
+                    <li><strong>Lunch:</strong> Grilled salmon with asparagus and brown rice.</li>
+                    <li><strong>Dinner:</strong> Stir-fried tofu with mixed vegetables and a small serving of noodles.</li>
+                    <li><strong>Snacks:</strong> Hard-boiled eggs, a handful of almonds, or cucumber slices.</li>
+                </ul>
+            ` },
+        { range: [30, 100], plan: `
+                <ul>
+                    <li><strong>Breakfast:</strong> Veggie omelette with a side of mixed fruit.</li>
+                    <li><strong>Lunch:</strong> Lentil soup with a small side salad.</li>
+                    <li><strong>Dinner:</strong> Grilled chicken breast with steamed spinach and quinoa.</li>
+                    <li><strong>Snacks:</strong> Celery sticks with almond butter, or a handful of walnuts.</li>
+                </ul>
+            ` }
+    ];
+
+    // Chart Data Initialization
+    let chartData = {
+        labels: ['Breakfast', 'Lunch', 'Dinner', 'Snacks'],
+        datasets: [{
+            label: 'Calories per Meal',
+            data: [0, 0, 0, 0], // Placeholder
+            backgroundColor: ['#ffcc99', '#66b3ff', '#99ff99', '#ffb3b3'],
+            borderColor: '#ddd',
+            borderWidth: 1
+        }]
+    };
+
+    // Initialize the Chart
+    const ctx = document.getElementById('mealChart').getContext('2d');
+    const mealChart = new Chart(ctx, {
+        type: 'bar',
+        data: chartData,
+        options: {
+            responsive: true,
+            plugins: {
+                legend: { position: 'top' },
+            }
+        }
+    });
+
+    // Handle Form Submission
+    document.getElementById('bmi-form').addEventListener('submit', function (e) {
+        e.preventDefault();
+
+        const bmi = parseFloat(document.getElementById('bmi').value);
+        const mealOutput = document.getElementById('meal-plans-output');
+        const mealPlanText = document.getElementById('meal-plan-text');
+
+        // Determine Meal Plan
+        let selectedPlan = "Please enter a valid BMI.";
+        for (let plan of mealPlans) {
+            if (bmi >= plan.range[0] && bmi < plan.range[1]) {
+                selectedPlan = plan.plan;
+                break;
+            }
+        }
+
+        // Display the Meal Plan
+        mealPlanText.innerHTML = selectedPlan;
+        mealOutput.style.display = 'block';
+
+        // Update Chart Data with Sample Calorie Breakdown
+        chartData.datasets[0].data = [400, 600, 500, 200]; // Sample calorie data
+        mealChart.update();
+    });
+</script>
+</body>
+
+</html>

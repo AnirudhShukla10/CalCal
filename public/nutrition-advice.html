@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Food Calorie Information</title>
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+
+    <!-- Inline CSS -->
+    <style>
+        body {
+            font-family: 'Roboto', sans-serif;
+            background-color: #f5f5f5;
+            margin: 0;
+            padding: 0;
+            color: #333;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        h1 {
+            text-align: center;
+            color: #5b8c5a;
+            font-size: 36px;
+            margin-top: 30px;
+        }
+
+        .dropdown {
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            margin-bottom: 30px;
+        }
+
+        .dropdown label {
+            font-size: 18px;
+            font-weight: 600;
+            color: #555;
+            margin-bottom: 10px;
+            display: block;
+        }
+
+        select {
+            width: 100%;
+            padding: 12px;
+            font-size: 16px;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            background-color: #fafafa;
+            color: #333;
+            margin-top: 10px;
+            transition: all 0.3s ease;
+        }
+
+        select:hover {
+            border-color: #5b8c5a;
+        }
+
+        option {
+            padding: 10px;
+        }
+
+        .footer {
+            text-align: center;
+            margin-top: 30px;
+            font-size: 14px;
+            color: #777;
+        }
+
+        .footer a {
+            color: #5b8c5a;
+            text-decoration: none;
+        }
+
+        .meal-plans-output {
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            margin-top: 20px;
+        }
+
+        .meal-plans-output h3 {
+            color: #5b8c5a;
+            font-size: 24px;
+            margin-bottom: 10px;
+        }
+
+        .meal-plans-output p {
+            font-size: 16px;
+            line-height: 1.6;
+        }
+
+        .meal-plans-output ul {
+            padding-left: 20px;
+        }
+
+        .meal-plans-output ul li {
+            margin-bottom: 10px;
+        }
+    </style>
+</head>
+
+<body>
+<div class="container">
+    <h1>Food Calorie Information</h1>
+
+    <!-- Dropdown for Food Categories -->
+    <div class="dropdown">
+        <label for="food-category">Select Food Category:</label>
+        <select id="food-category">
+            <option value="fast-food">Fast Food</option>
+            <option value="plain-food">Normal Plain Food</option>
+            <option value="fruits">Fruits</option>
+            <option value="other-dishes">Other Dishes</option>
+        </select>
+    </div>
+
+    <!-- Display the food list based on the selected category -->
+    <div class="dropdown">
+        <label for="food-list">Select Food:</label>
+        <select id="food-list">
+            <!-- The food items will be populated here based on the selected category -->
+        </select>
+    </div>
+
+    <div class="footer">
+        <p>&copy; 2024 Food Calorie Information. All rights reserved.</p>
+    </div>
+</div>
+
+<script>
+    // Food data for each category
+    const foodData = {
+        'fast-food': [
+            { name: 'Hamburger', calories: '250 kcal' },
+            { name: 'Cheeseburger', calories: '300 kcal' },
+            { name: 'French Fries (Medium)', calories: '350 kcal' },
+            { name: 'Fried Chicken (1 piece)', calories: '400 kcal' },
+            { name: 'Chicken Nuggets (6 pieces)', calories: '280 kcal' },
+            { name: 'Pizza (1 slice, pepperoni)', calories: '285 kcal' },
+            { name: 'Milkshake (Medium)', calories: '500 kcal' },
+            { name: 'Hot Dog', calories: '150 kcal' }
+        ],
+        'plain-food': [
+            { name: 'Boiled Egg', calories: '78 kcal' },
+            { name: 'Grilled Chicken Breast (100g)', calories: '165 kcal' },
+            { name: 'Boiled Potato (Medium)', calories: '110 kcal' },
+            { name: 'Brown Rice (1 cup cooked)', calories: '218 kcal' },
+            { name: 'Steamed Broccoli (1 cup)', calories: '55 kcal' },
+            { name: 'Spinach (1 cup cooked)', calories: '41 kcal' },
+            { name: 'Tofu (100g)', calories: '144 kcal' },
+            { name: 'Panner (1 cup cooked)', calories: '222 kcal' }
+        ],
+        'fruits': [
+            { name: 'Apple (Medium)', calories: '95 kcal' },
+            { name: 'Banana (Medium)', calories: '105 kcal' },
+            { name: 'Orange (Medium)', calories: '62 kcal' },
+            { name: 'Strawberries (1 cup)', calories: '50 kcal' },
+            { name: 'Blueberries (1 cup)', calories: '85 kcal' },
+            { name: 'Watermelon (1 cup)', calories: '46 kcal' },
+            { name: 'Mango (1 Medium)', calories: '150 kcal' },
+            { name: 'Pineapple (1 cup)', calories: '82 kcal' }
+        ],
+        'other-dishes': [
+            { name: 'Dal (1 cup)', calories: '200 kcal' },
+            { name: 'Roti (1 slice)', calories: '50 kcal' },
+            { name: 'Chicken Curry (1 cup)', calories: '400 kcal' },
+            { name: 'Vegetable Stir Fry (1 cup)', calories: '220 kcal' },
+            { name: 'Panner Tikka Masala (Medium)', calories: '890 kcal' },
+            { name: 'Pani Puri (2pieces)', calories: '80 kcal' },
+            { name: 'Chicken Wrap', calories: '450 kcal' },
+            { name: 'Pav Bhaji (1 bowl)', calories: '150 kcal' }
+        ]
+    };
+
+    // Get references to the dropdowns
+    const foodCategoryDropdown = document.getElementById('food-category');
+    const foodListDropdown = document.getElementById('food-list');
+
+    // Function to populate food list based on selected category
+    function populateFoodList(category) {
+        const foodItems = foodData[category];
+        foodListDropdown.innerHTML = ''; // Clear previous list
+
+        foodItems.forEach(item => {
+            const option = document.createElement('option');
+            option.value = item.name;
+            option.textContent = `${item.name} - ${item.calories}`;
+            foodListDropdown.appendChild(option);
+        });
+    }
+
+    // Event listener for food category selection
+    foodCategoryDropdown.addEventListener('change', function () {
+        const selectedCategory = foodCategoryDropdown.value;
+        populateFoodList(selectedCategory);
+    });
+
+    // Populate the list with the default category (Fast Food)
+    populateFoodList('fast-food');
+</script>
+</body>
+
+</html>

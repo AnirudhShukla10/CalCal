@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Detailed Exercise Recommendations</title>
+
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+
+    <!-- Inline CSS -->
+    <style>
+        body {
+            font-family: 'Roboto', sans-serif;
+            background-color: #f5f5f5;
+            margin: 0;
+            padding: 0;
+            color: #333;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 20px auto;
+            padding: 20px;
+        }
+
+        h1 {
+            text-align: center;
+            color: #4CAF50;
+            font-size: 36px;
+        }
+
+        p {
+            text-align: center;
+            color: #666;
+        }
+
+        .form-container {
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            margin-bottom: 20px;
+        }
+
+        .form-container h3 {
+            margin-bottom: 15px;
+            color: #4CAF50;
+        }
+
+        .form-container input,
+        .form-container button {
+            width: 100%;
+            padding: 10px;
+            margin: 10px 0;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            font-size: 16px;
+        }
+
+        .form-container button {
+            background-color: #4CAF50;
+            color: white;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        .form-container button:hover {
+            background-color: #45a049;
+        }
+
+        .exercise-result {
+            margin-top: 30px;
+            background: #fff;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+
+        .exercise-result h3 {
+            color: #FF6347;
+        }
+
+        .exercise-details {
+            font-size: 18px;
+            line-height: 1.6;
+            margin-top: 15px;
+        }
+
+        .exercise-details ul {
+            padding-left: 20px;
+        }
+
+        .exercise-details li {
+            margin-bottom: 15px;
+        }
+
+        .footer {
+            text-align: center;
+            margin-top: 30px;
+            font-size: 14px;
+            color: #777;
+        }
+
+        .footer a {
+            color: #4CAF50;
+            text-decoration: none;
+        }
+    </style>
+</head>
+
+<body>
+<div class="container">
+    <h1>Exercise Recommendations Based on BMI</h1>
+    <p>Calculate your BMI and get personalized exercise recommendations to help you achieve your health goals.</p>
+
+    <!-- BMI Form -->
+    <div class="form-container">
+        <h3>Enter Your Details</h3>
+        <form id="bmi-form">
+            <input type="number" id="weight" placeholder="Weight (kg)" required>
+            <input type="number" id="height" placeholder="Height (cm)" required>
+            <button type="submit">Calculate BMI</button>
+        </form>
+    </div>
+
+    <!-- Exercise Result Section -->
+    <div id="exercise-result" class="exercise-result" style="display: none;">
+        <h3>Your Exercise Recommendations</h3>
+        <p id="bmi-message"></p>
+        <div id="exercise-details" class="exercise-details"></div>
+    </div>
+
+    <!-- Footer -->
+    <div class="footer">
+        <p>&copy; 2024 CalCal. All rights reserved. <a href="index.html">Back to Home</a></p>
+    </div>
+</div>
+
+<!-- JavaScript -->
+<script>
+    const bmiForm = document.getElementById("bmi-form");
+    const exerciseResult = document.getElementById("exercise-result");
+    const bmiMessage = document.getElementById("bmi-message");
+    const exerciseDetails = document.getElementById("exercise-details");
+
+    // Exercise suggestions with detailed instructions
+    const exercises = {
+        underweight: [
+            {
+                name: "Bodyweight Squats",
+                description: "Stand with your feet shoulder-width apart, bend your knees, and lower your hips as if sitting in a chair. Push through your heels to return to standing. Repeat for 3 sets of 12 reps."
+            },
+            {
+                name: "Push-ups",
+                description: "Start in a plank position with your hands directly under your shoulders. Lower your body until your chest nearly touches the ground, then push yourself back up. Repeat for 3 sets of 10 reps."
+            },
+            {
+                name: "Deadlifts (light weights)",
+                description: "Stand with feet hip-width apart, hold light weights in front of your thighs, and slowly bend at the hips while keeping your back straight. Return to standing. Repeat for 3 sets of 10 reps."
+            },
+            {
+                name: "Resistance Band Exercises",
+                description: "Use a resistance band to perform exercises such as lateral leg raises, shoulder presses, and chest presses to help build muscle mass."
+            },
+            {
+                name: "Yoga (gentle poses)",
+                description: "Practice yoga to build flexibility and strength, focusing on poses such as Warrior II, Downward Dog, and Child’s Pose."
+            }
+        ],
+        normal: [
+            {
+                name: "Jogging or Running",
+                description: "Start with a light jog for 5-10 minutes, gradually increasing your pace. Aim for 30 minutes of steady jogging or running."
+            },
+            {
+                name: "Jumping Jacks",
+                description: "Stand with your feet together and jump, spreading your legs while raising your arms overhead. Return to the starting position and repeat for 3 sets of 30 seconds."
+            },
+            {
+                name: "Push-ups",
+                description: "Perform push-ups in sets of 3-4, with 10-15 repetitions. Focus on maintaining proper form throughout each rep."
+            },
+            {
+                name: "Plank",
+                description: "Hold a plank position on your elbows for 30 seconds, gradually increasing the time as you build core strength."
+            },
+            {
+                name: "Squats",
+                description: "Stand with your feet shoulder-width apart, lower your body into a squat position while keeping your knees behind your toes. Repeat for 3 sets of 12 reps."
+            }
+        ],
+        overweight: [
+            {
+                name: "Brisk Walking",
+                description: "Walk at a brisk pace for 30-45 minutes to improve cardiovascular health and burn calories."
+            },
+            {
+                name: "Swimming",
+                description: "Swim laps at a moderate pace for 30 minutes. Swimming is an excellent low-impact exercise for overweight individuals."
+            },
+            {
+                name: "Bodyweight Squats",
+                description: "Perform bodyweight squats to build lower body strength. Start with 3 sets of 10 reps."
+            },
+            {
+                name: "Lunges",
+                description: "Step forward with one leg, lowering your back knee toward the ground. Alternate legs for 3 sets of 10 reps."
+            },
+            {
+                name: "Jump Rope",
+                description: "Jump rope for 1-2 minutes to improve coordination, stamina, and cardiovascular health."
+            }
+        ],
+        obese: [
+            {
+                name: "Walking (low impact)",
+                description: "Walk at a comfortable pace for 20-30 minutes per day to start. Gradually increase the time and intensity."
+            },
+            {
+                name: "Stationary Bike",
+                description: "Use a stationary bike at a moderate pace for 20-30 minutes to improve cardiovascular health."
+            },
+            {
+                name: "Water Aerobics",
+                description: "Take a water aerobics class to improve muscle tone and cardiovascular fitness with minimal joint impact."
+            },
+            {
+                name: "Chair Exercises",
+                description: "Perform seated exercises such as leg raises, seated marches, and arm lifts. Start with 3 sets of 10 reps."
+            },
+            {
+                name: "Modified Push-ups",
+                description: "Perform push-ups with your knees on the ground for added support. Start with 3 sets of 8 reps."
+            }
+        ]
+    };
+
+    // Function to calculate BMI and provide exercise details
+    bmiForm.addEventListener("submit", function (e) {
+        e.preventDefault();
+
+        const weight = parseFloat(document.getElementById("weight").value);
+        const height = parseFloat(document.getElementById("height").value);
+
+        // Validate input
+        if (isNaN(weight) || isNaN(height) || weight <= 0 || height <= 0) {
+            alert("Please enter valid weight and height.");
+            return;
+        }
+
+        const heightInMeters = height / 100;
+        const bmi = weight / (heightInMeters * heightInMeters);
+
+        let bmiCategory = "";
+        if (bmi < 18.5) {
+            bmiCategory = "underweight";
+            bmiMessage.textContent = "Your BMI is underweight. Focus on gaining muscle and building healthy weight.";
+        } else if (bmi >= 18.5 && bmi < 24.9) {
+            bmiCategory = "normal";
+            bmiMessage.textContent = "Your BMI is normal. Maintain your healthy weight with regular exercise.";
+        } else if (bmi >= 25 && bmi < 29.9) {
+            bmiCategory = "overweight";
+            bmiMessage.textContent = "You are overweight. Focus on losing weight with a balanced diet and increased physical activity.";
+        } else {
+            bmiCategory = "obese";
+            bmiMessage.textContent = "You are obese. Consider consulting a healthcare professional for guidance on weight loss.";
+        }
+
+        // Display exercises based on BMI category
+        exerciseDetails.innerHTML = "";
+        exercises[bmiCategory].forEach(exercise => {
+            const exerciseItem = document.createElement("div");
+            exerciseItem.innerHTML = `<h4>${exercise.name}</h4><p>${exercise.description}</p>`;
+            exerciseDetails.appendChild(exerciseItem);
+        });
+
+        exerciseResult.style.display = "block";
+
+        // Reset form
+        bmiForm.reset();
+    });
+</script>
+</body>
+
+</html>

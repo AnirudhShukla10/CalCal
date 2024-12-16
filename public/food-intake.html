@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Food Intake Analysis</title>
+
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+
+    <!-- Chart.js CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <!-- Inline CSS -->
+    <style>
+        body {
+            font-family: 'Roboto', sans-serif;
+            background-color: #f5f5f5; /* Set background color to light gray */
+            margin: 0;
+            padding: 0;
+            color: #333;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 20px auto;
+            padding: 20px;
+        }
+
+        h1 {
+            text-align: center;
+            color: #4CAF50;
+            font-size: 36px;
+        }
+
+        p {
+            text-align: center;
+            color: #666;
+        }
+
+        /* Form Styling */
+        .form-container {
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            margin-bottom: 20px;
+        }
+
+        .form-container h3 {
+            margin-bottom: 15px;
+            color: #4CAF50;
+        }
+
+        .form-container input,
+        .form-container button {
+            width: 100%;
+            padding: 10px;
+            margin: 10px 0;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            font-size: 16px;
+        }
+
+        .form-container button {
+            background-color: #4CAF50;
+            color: white;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        .form-container button:hover {
+            background-color: #45a049;
+        }
+
+        /* Table Styling */
+        .table-container {
+            margin-top: 20px;
+            background: #fff;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        table th,
+        table td {
+            padding: 10px;
+            border: 1px solid #ddd;
+            text-align: center;
+        }
+
+        table th {
+            background-color: #4CAF50;
+            color: white;
+        }
+
+        table tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+
+        /* Chart Container */
+        .chart-container {
+            margin-top: 30px;
+            background: #fff;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        /* Footer */
+        .footer {
+            text-align: center;
+            margin-top: 30px;
+            font-size: 14px;
+            color: #777;
+        }
+
+        .footer a {
+            color: #4CAF50;
+            text-decoration: none;
+        }
+    </style>
+</head>
+
+<body>
+<div class="container">
+    <h1>Food Intake Analysis</h1>
+    <p>Track your daily food intake and analyze its nutritional value.</p>
+
+    <!-- Food Intake Form -->
+    <div class="form-container">
+        <h3>Enter Food Details</h3>
+        <form id="food-form">
+            <input type="text" id="food-item" placeholder="Food Item" required>
+            <input type="number" id="calories" placeholder="Calories (kcal)" required>
+            <input type="number" id="protein" placeholder="Protein (g)" required>
+            <input type="number" id="carbs" placeholder="Carbohydrates (g)" required>
+            <input type="number" id="fat" placeholder="Fat (g)" required>
+            <button type="submit">Add Food</button>
+        </form>
+    </div>
+
+    <!-- Table Display -->
+    <div class="table-container">
+        <h3>Food Intake Summary</h3>
+        <table id="food-table">
+            <thead>
+            <tr>
+                <th>Food Item</th>
+                <th>Calories (kcal)</th>
+                <th>Protein (g)</th>
+                <th>Carbs (g)</th>
+                <th>Fat (g)</th>
+            </tr>
+            </thead>
+            <tbody>
+            <!-- Food items will be dynamically added here -->
+            </tbody>
+        </table>
+    </div>
+
+    <!-- Chart Section -->
+    <div class="chart-container">
+        <canvas id="foodChart"></canvas>
+    </div>
+
+    <!-- Footer -->
+    <div class="footer">
+        <p>&copy; 2024 CalCal. All rights reserved. <a href="index.html">Back to Home</a></p>
+    </div>
+</div>
+
+<!-- JavaScript -->
+<script>
+    const foodTable = document.querySelector("#food-table tbody");
+    const foodForm = document.getElementById("food-form");
+
+    // Chart.js initialization
+    const ctx = document.getElementById('foodChart').getContext('2d');
+    const foodChart = new Chart(ctx, {
+        type: 'bar',
+        data: {
+            labels: ['Calories', 'Protein', 'Carbs', 'Fat'],
+            datasets: [{
+                label: 'Nutritional Breakdown',
+                data: [0, 0, 0, 0],
+                backgroundColor: ['#FFB74D', '#4FC3F7', '#81C784', '#FF8A80'],
+                borderWidth: 1
+            }]
+        },
+        options: { responsive: true }
+    });
+
+    let totals = { calories: 0, protein: 0, carbs: 0, fat: 0 };
+
+    // Handle form submission
+    foodForm.addEventListener("submit", function (e) {
+        e.preventDefault();
+
+        const foodItem = document.getElementById("food-item").value;
+        const calories = parseFloat(document.getElementById("calories").value);
+        const protein = parseFloat(document.getElementById("protein").value);
+        const carbs = parseFloat(document.getElementById("carbs").value);
+        const fat = parseFloat(document.getElementById("fat").value);
+
+        // Add row to table
+        const row = `<tr>
+                            <td>${foodItem}</td>
+                            <td>${calories}</td>
+                            <td>${protein}</td>
+                            <td>${carbs}</td>
+                            <td>${fat}</td>
+                         </tr>`;
+        foodTable.innerHTML += row;
+
+        // Update totals
+        totals.calories += calories;
+        totals.protein += protein;
+        totals.carbs += carbs;
+        totals.fat += fat;
+
+        // Update Chart
+        foodChart.data.datasets[0].data = [
+            totals.calories,
+            totals.protein,
+            totals.carbs,
+            totals.fat
+        ];
+        foodChart.update();
+
+        // Reset form
+        foodForm.reset();
+    });
+</script>
+</body>
+
+</html>
